@@ -6,7 +6,7 @@ let
     homepage = "https://github.com/fossable/sandpolis";
     license = licenses.agpl3Plus;
     sourceProvenance = with sourceTypes; [ fromSource ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.unix;
     maintainers = with maintainers; [ cilki ];
   };
 in {
