@@ -1,11 +1,11 @@
 { fetchFromGitHub, rustPlatform, pkgs, lib }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "goldboot";
-  version = "0.0.10";
+  pname = "goldboot-registry";
+  version = "0.0.5";
 
   meta = with lib; {
-    mainProgram = "goldboot";
+    mainProgram = "goldboot-registry";
     description = "Immutable infrastructure for the desktop!";
     homepage = "https://github.com/fossable/goldboot";
     license = licenses.agpl3Plus;
@@ -19,12 +19,13 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "fossable";
     repo = "goldboot";
-    rev = "goldboot-${version}";
+    rev = "goldboot-registry-${version}";
     hash = "sha256-O9yhyJZpjQxC0HP43RsOgPMOKp6d23SNhMLiGtmwXzs=";
   };
 
   doCheck = false;
-  buildAndTestSubdir = "goldboot";
+  # sourceRoot = "${src.name}/goldboot-registry";
+  buildAndTestSubdir = "goldboot-registry";
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-NF0Fj+r6qWcM4VEIm1fzveZuz6MIaG32Z+zBfSMC/t4=";
