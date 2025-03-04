@@ -5252,6 +5252,7 @@
     githubId = 3984794;
   };
   cilki = {
+    email = "10459406+cilki@users.noreply.github.com";
     github = "cilki";
     githubId = 10459406;
     name = "Tyler Cook";
