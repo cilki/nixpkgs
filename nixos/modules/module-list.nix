@@ -1612,6 +1612,7 @@
   ./services/web-apps/firefly-iii.nix
   ./services/web-apps/flarum.nix
   ./services/web-apps/fluidd.nix
+  ./services/web-apps/fossdb.nix
   ./services/web-apps/freshrss.nix
   ./services/web-apps/froide-govplan.nix
   ./services/web-apps/galene.nix
