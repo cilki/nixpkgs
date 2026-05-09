@@ -42,6 +42,13 @@ buildNpmPackage (finalAttrs: {
     local onnxDir=$out/lib/node_modules/@mattzam/redact-mcp/node_modules/onnxruntime-node/bin/napi-v3/linux/${onnxArch}
     mkdir -p "$onnxDir"
     ln -sf ${lib.getLib onnxruntime}/lib/libonnxruntime.so "$onnxDir"/libonnxruntime.so.1.21.0
+
+    mkdir -p $out/redact
+    cp -r ../hooks ../skills ../.claude-plugin $out/redact/
+
+    cp ${
+      builtins.toFile "mcp.json" (builtins.toJSON { mcpServers.redact-mcp.command = "redact-mcp"; })
+    } $out/.mcp.json
   '';
 
   meta = {
