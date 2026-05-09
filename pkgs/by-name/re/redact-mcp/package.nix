@@ -48,7 +48,7 @@ buildNpmPackage (finalAttrs: {
 
     cp ${
       builtins.toFile "mcp.json" (builtins.toJSON { mcpServers.redact-mcp.command = "redact-mcp"; })
-    } $out/.mcp.json
+    } $out/redact/.mcp.json
   '';
 
   meta = {
