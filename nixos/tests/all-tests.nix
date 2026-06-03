@@ -674,6 +674,7 @@ in
   gocd-agent = runTest ./gocd-agent.nix;
   gocd-server = runTest ./gocd-server.nix;
   gokapi = runTest ./gokapi.nix;
+  goldboot-registry = runTest ./goldboot-registry.nix;
   gollum = runTest ./gollum.nix;
   gonic = runTest ./gonic.nix;
   google-oslogin = runTest ./google-oslogin;
