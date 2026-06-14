@@ -2,6 +2,8 @@
 let
   cfg = config.services.goldboot;
 
+  # TODO support nginx proxy like frigate
+
   # Build the parts of the config we can know at evaluation time (no
   # secrets). The systemd unit's preStart script merges in the password
   # hashes loaded via LoadCredential and emits the final TOML to
