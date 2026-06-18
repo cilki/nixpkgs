@@ -1413,6 +1413,8 @@
   ./services/networking/rpcbind.nix
   ./services/networking/rxe.nix
   ./services/networking/sabnzbd
+  ./services/networking/sandpolis-agent.nix
+  ./services/networking/sandpolis-server.nix
   ./services/networking/scion/scion-control.nix
   ./services/networking/scion/scion-daemon.nix
   ./services/networking/scion/scion-dispatcher.nix

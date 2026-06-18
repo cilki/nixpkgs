@@ -1,33 +1,45 @@
-{ fetchFromGitHub, rustPlatform, pkgs, lib }:
+{
+  lib,
+  rustPlatform,
+  sandpolis-server,
+  pkg-config,
+  cmake,
+  udev,
+  openssl,
+}:
 
-rustPlatform.buildRustPackage rec {
+# Every instance is built from the same `sandpolis` crate, so the source and
+# vendored dependencies are shared with sandpolis-server; only the enabled
+# Cargo feature differs.
+rustPlatform.buildRustPackage {
   pname = "sandpolis-agent";
-  version = "8.0.0";
-
-  meta = with lib; {
-    mainProgram = "sandpolis-agent";
-    description = "Ultimate virtual estate monitoring and management!";
-    homepage = "https://github.com/fossable/sandpolis";
-    license = licenses.agpl3Plus;
-    sourceProvenance = with sourceTypes; [ fromSource ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ cilki ];
-  };
-  nativeBuildInputs = with pkgs; [ pkg-config ];
-  buildInputs = with pkgs; [ udev cmake openssl ];
-
-  src = fetchFromGitHub {
-    owner = "fossable";
-    repo = "sandpolis";
-    rev = "sandpolis-${version}";
-    hash = "sha256-bSxYwQfAEOs/kXvIvsbacZS++kyrTuXpoYBNUy360w4=";
-  };
+  inherit (sandpolis-server) version src cargoDeps;
 
   buildAndTestSubdir = "sandpolis";
   buildFeatures = [ "agent" ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-ELO9Hz8wUX1Fxpu3otahIgfvuSsJaQADnZCLrcEWiyQ=";
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+  ];
 
-  passthru.updateScript = ./update.sh;
+  buildInputs = [
+    udev
+    openssl
+  ];
+
+  doCheck = false;
+
+  postInstall = ''
+    mv $out/bin/sandpolis $out/bin/sandpolis-agent
+  '';
+
+  meta = {
+    description = "Agent instance for the Sandpolis virtual estate manager";
+    homepage = "https://github.com/fossable/sandpolis";
+    license = lib.licenses.agpl3Plus;
+    mainProgram = "sandpolis-agent";
+    maintainers = with lib.maintainers; [ cilki ];
+    platforms = lib.platforms.linux;
+  };
 }
