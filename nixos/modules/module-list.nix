@@ -873,6 +873,7 @@
   ./services/misc/forgejo.nix
   ./services/misc/freeswitch.nix
   ./services/misc/fstrim.nix
+  ./services/misc/futo-notes-server.nix
   ./services/misc/gammu-smsd.nix
   ./services/misc/geoipupdate.nix
   ./services/misc/gitea.nix
