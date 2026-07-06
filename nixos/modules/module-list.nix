@@ -232,6 +232,7 @@
   ./programs/gnome-disks.nix
   ./programs/gnome-terminal.nix
   ./programs/gnupg.nix
+  ./programs/goldboot.nix
   ./programs/gpaste.nix
   ./programs/gphoto2.nix
   ./programs/gpu-screen-recorder.nix
@@ -875,7 +876,7 @@
   ./services/misc/gitlab.nix
   ./services/misc/gitolite.nix
   ./services/misc/gitweb.nix
-  ./services/misc/goldboot.nix
+  ./services/misc/goldboot-registry.nix
   ./services/misc/gollum.nix
   ./services/misc/gotenberg.nix
   ./services/misc/gpsd.nix

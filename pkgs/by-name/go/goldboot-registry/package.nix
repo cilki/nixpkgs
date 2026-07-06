@@ -1,5 +1,10 @@
-{ fetchFromGitHub, rustPlatform, lib, versionCheckHook, pkg-config, openssl
-, nix-update-script, }:
+{
+  fetchFromGitHub,
+  rustPlatform,
+  lib,
+  versionCheckHook,
+  nix-update-script,
+}:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "goldboot-registry";
@@ -16,11 +21,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildAndTestSubdir = "goldboot-registry";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
-
-  # The integration test spawns the binary, exercising the real subcommand
-  # dispatch + argon2 + axum stack; it requires only stdlib + crates.
   doCheck = true;
 
   doInstallCheck = true;
@@ -33,9 +33,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     mainProgram = "goldboot-registry";
     description = "Image registry server for the goldboot image format";
+    longDescription = ''
+      Serves goldboot images over plain HTTP. The server performs no TLS
+      termination or authentication itself; it is designed to run behind a
+      reverse proxy (see the NixOS option services.goldboot-registry.nginx).
+    '';
     homepage = "https://github.com/fossable/goldboot";
-    changelog =
-      "https://github.com/fossable/goldboot/releases/tag/goldboot-registry-v${finalAttrs.version}";
+    changelog = "https://github.com/fossable/goldboot/releases/tag/goldboot-registry-v${finalAttrs.version}";
     license = lib.licenses.unlicense;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ cilki ];

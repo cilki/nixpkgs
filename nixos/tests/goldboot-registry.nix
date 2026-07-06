@@ -1,69 +1,69 @@
 { pkgs, ... }:
 
-# Smoke test: spin up a NixOS machine with services.goldboot enabled and
-# verify the daemon comes up, anonymous requests are rejected with 401,
-# and bad passwords return 401 with no information disclosure.
+# Smoke test: spin up a NixOS machine running the goldboot registry behind
+# the module's nginx reverse proxy and verify that the backend serves plain
+# HTTP while nginx enforces Basic Auth.
 
 {
   name = "goldboot-registry";
-  meta = { };
+  meta.maintainers = with pkgs.lib.maintainers; [ cilki ];
 
-  nodes.machine = { ... }: {
-    # Drop the argon2id hash into /etc rather than /nix/store so the
-    # module's anti-foot-gun assertion (no store paths for password
-    # hashes) is satisfied. In production this file would be managed by
-    # sops-nix / agenix.
-    environment.etc."goldboot-registry/alice.hash".text = ''
-      $argon2id$v=19$m=19456,t=2,p=1$YQAAAAAAAAAAAAAAAAAAAA$0r/W2/dXqAvjVcg0nKKM2tn3wkvMOJjXAg8DZpwIPng
-    '';
-
-    services.goldboot = {
-      enable = true;
-      listenAddress = "127.0.0.1";
-      port = 3000;
-      openFirewall = false;
-      users.alice = {
-        passwordHashFile = "/etc/goldboot-registry/alice.hash";
-        pull = true;
-        push = true;
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      services.goldboot-registry = {
+        enable = true;
+        nginx = {
+          enable = true;
+          hostname = "registry.test";
+          # A store path is fine for a throwaway test credential; real
+          # deployments should keep the htpasswd file outside the store.
+          basicAuthFile = pkgs.runCommand "htpasswd" { } ''
+            ${pkgs.apacheHttpd}/bin/htpasswd -nbB alice password > $out
+          '';
+        };
       };
+      networking.hosts."127.0.0.1" = [ "registry.test" ];
+      environment.systemPackages = [ pkgs.curl ];
     };
-    environment.systemPackages = [ pkgs.curl pkgs.jq ];
-  };
 
   testScript = ''
     machine.wait_for_unit("goldboot-registry.service")
     machine.wait_for_open_port(3000)
+    machine.wait_for_unit("nginx.service")
+    machine.wait_for_open_port(80)
 
-    # Anonymous list → 401
+    # The backend itself is unauthenticated plain HTTP
     status = machine.succeed(
         "curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:3000/v1/images"
     ).strip()
-    assert status == "401", f"expected 401 for anonymous request, got {status}"
+    assert status == "200", f"expected 200 from the backend, got {status}"
 
-    # Wrong password → 401
+    # Via nginx without credentials -> 401
+    anon = machine.succeed(
+        "curl -s -o /dev/null -w '%{http_code}' http://registry.test/v1/images"
+    ).strip()
+    assert anon == "401", f"expected 401 via nginx without credentials, got {anon}"
+
+    # Wrong credentials -> 401
     bad = machine.succeed(
-        "curl -s -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' "
-        "-d '{\"username\":\"alice\",\"password\":\"wrong\"}' "
-        "http://127.0.0.1:3000/v1/auth/login"
+        "curl -s -o /dev/null -w '%{http_code}' -u alice:wrong http://registry.test/v1/images"
     ).strip()
-    assert bad == "401", f"expected 401 for wrong password, got {bad}"
+    assert bad == "401", f"expected 401 via nginx with bad credentials, got {bad}"
 
-    # Missing user → also 401 (no information disclosure)
-    nobody = machine.succeed(
-        "curl -s -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' "
-        "-d '{\"username\":\"nobody\",\"password\":\"x\"}' "
-        "http://127.0.0.1:3000/v1/auth/login"
+    # Valid credentials -> 200
+    ok = machine.succeed(
+        "curl -s -o /dev/null -w '%{http_code}' -u alice:password http://registry.test/v1/images"
     ).strip()
-    assert nobody == "401", f"expected 401 for missing user, got {nobody}"
+    assert ok == "200", f"expected 200 via nginx with credentials, got {ok}"
 
-    # Verify the generated config file has restrictive permissions
-    perms = machine.succeed("stat -c %a /run/goldboot-registry/config.toml").strip()
-    assert perms == "640", f"expected mode 640, got {perms}"
-
-    # The hash file must not have leaked via journalctl
-    machine.fail(
-        "journalctl -u goldboot-registry --no-pager | grep -q argon2id"
-    )
+    # An authenticated upload reaches the registry (which rejects the bogus
+    # body itself) instead of being cut off by nginx (413 or 401)
+    push = machine.succeed(
+        "curl -s -o /dev/null -w '%{http_code}' -u alice:password "
+        "-X PUT --data-binary 'not a goldboot image' "
+        "http://registry.test/v1/images/test/tags/latest"
+    ).strip()
+    assert push not in ("401", "413"), f"upload blocked by nginx with {push}"
   '';
 }
