@@ -22,23 +22,23 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "futo-notes";
-  version = "1.5.5";
+  version = "1.6.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.futo.org";
     owner = "futo-notes";
     repo = "futo-notes";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-G6PVrYtjVtjbhEGjz8XqX0UXTLIBoZ8BfDk2x7UpluA=";
+    hash = "sha256-ILtfrU/Pr+Gmnngt65W2A4NBx93OwfHHAVCA8r7Nm4c=";
   };
 
-  cargoHash = "sha256-1wh7kCysh6lDRimLq101v6WwHwsK6GzcboEGMWrQ/ec=";
+  cargoHash = "sha256-ZeCFObDMeI37QqklsqqqWMe0CBsaXoyyrfI7X5IayP4=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-THApUJM0mMPn1p2jrkuxp+PCNbK7uKsoX/ghV7lkoAI=";
+    hash = "sha256-yanbyx82Rq5onWXIU+VNVg3T9Ca/5EEVyG/by0D25qQ=";
   };
 
   nativeBuildInputs = [

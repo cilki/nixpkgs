@@ -1,23 +1,16 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitLab,
-  bun,
-  makeBinaryWrapper,
-  writableTmpDirAsHomeHook,
-  nix-update-script,
-}:
+{ lib, stdenvNoCC, fetchFromGitLab, bun, makeBinaryWrapper
+, writableTmpDirAsHomeHook, nix-update-script, }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "futo-notes-server";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.futo.org";
     owner = "futo-notes";
     repo = "futo-notes-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NknRhMCz7xKtBinSJ23QKEefAH6kJcAfLy+tToxsXjY=";
+    hash = "sha256-bSfktqOJ1QmH8WsVha6ksh0e6mV9ADS9o0sIvQXX864=";
   };
 
   # Production dependencies only (hono, kysely, pg, uuidv7) — all pure JS, so
@@ -26,15 +19,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "${finalAttrs.pname}-node_modules";
     inherit (finalAttrs) version src;
 
-    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-      "GIT_PROXY_COMMAND"
-      "SOCKS_SERVER"
-    ];
+    impureEnvVars = lib.fetchers.proxyImpureEnvVars
+      ++ [ "GIT_PROXY_COMMAND" "SOCKS_SERVER" ];
 
-    nativeBuildInputs = [
-      bun
-      writableTmpDirAsHomeHook
-    ];
+    nativeBuildInputs = [ bun writableTmpDirAsHomeHook ];
 
     dontConfigure = true;
 
