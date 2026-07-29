@@ -7,6 +7,8 @@
 
 let
   cfg = config.services.futo-notes-server;
+  defaultDataDir = "/var/lib/futo-notes-server";
+  useStateDirectory = cfg.dataDir == defaultDataDir;
 in
 {
   options.services.futo-notes-server = {
@@ -14,6 +16,18 @@ in
     enable = lib.mkEnableOption "FUTO Notes sync server";
 
     package = lib.mkPackageOption pkgs "futo-notes-server" { };
+
+    dataDir = lib.mkOption {
+      type = lib.types.path;
+      default = defaultDataDir;
+      description = ''
+        Directory where the server stores its data, including uploaded
+        blobs. When left at the default under {file}`/var/lib`, the
+        directory is created and owned automatically via systemd's
+        `StateDirectory`; if you point it elsewhere, make sure the
+        directory exists and is writable by the service.
+      '';
+    };
 
     port = lib.mkOption {
       type = lib.types.port;
@@ -141,7 +155,7 @@ in
       environment = {
         PORT = toString cfg.port;
         DATABASE_URL = cfg.database.url;
-        BLOB_DIR = "/var/lib/futo-notes-server/blobs";
+        BLOB_DIR = "${cfg.dataDir}/blobs";
         LOG_LEVEL = cfg.logLevel;
         AUTH_MODE = "password";
       }
@@ -151,8 +165,9 @@ in
         ExecStart = lib.getExe cfg.package;
         DynamicUser = true;
         User = "futo-notes-server";
-        StateDirectory = "futo-notes-server";
-        StateDirectoryMode = "0700";
+        StateDirectory = lib.mkIf useStateDirectory "futo-notes-server";
+        StateDirectoryMode = lib.mkIf useStateDirectory "0700";
+        ReadWritePaths = lib.mkIf (!useStateDirectory) [ cfg.dataDir ];
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         Restart = "on-failure";
         RestartSec = 5;
