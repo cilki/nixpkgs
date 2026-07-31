@@ -25,7 +25,7 @@ in
         blobs. When left at the default under {file}`/var/lib`, the
         directory is created and owned automatically via systemd's
         `StateDirectory`; if you point it elsewhere, make sure the
-        directory exists and is writable by the service.
+        directory exists and is owned by the `futo-notes-server` user.
       '';
     };
 
@@ -130,6 +130,12 @@ in
 
     networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
 
+    users.users.futo-notes-server = {
+      isSystemUser = true;
+      group = "futo-notes-server";
+    };
+    users.groups.futo-notes-server = { };
+
     services.postgresql = lib.mkIf cfg.database.createLocally {
       enable = true;
       ensureDatabases = [ "futo-notes-server" ];
@@ -163,8 +169,8 @@ in
 
       serviceConfig = {
         ExecStart = lib.getExe cfg.package;
-        DynamicUser = true;
         User = "futo-notes-server";
+        Group = "futo-notes-server";
         StateDirectory = lib.mkIf useStateDirectory "futo-notes-server";
         StateDirectoryMode = lib.mkIf useStateDirectory "0700";
         ReadWritePaths = lib.mkIf (!useStateDirectory) [ cfg.dataDir ];
