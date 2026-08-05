@@ -9,21 +9,26 @@
   qemu,
   qemu-utils,
   openssl,
+  udev,
+  wayland,
+  wayland-protocols,
+  libxkbcommon,
+  libGL,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "goldboot";
-  version = "0.0.10";
+  version = "0.0.10-unstable-2026-08-05";
 
   src = fetchFromGitHub {
     owner = "fossable";
     repo = "goldboot";
-    rev = "goldboot-v${finalAttrs.version}";
-    hash = "sha256-O9yhyJZpjQxC0HP43RsOgPMOKp6d23SNhMLiGtmwXzs=";
+    rev = "f8c1c48e066205369846242896e157d0eef2b144";
+    hash = "sha256-OnfbU7nN6x3Ksy74SxVrvoz2nonwHyGOwoLndY22C4E=";
   };
 
-  cargoHash = "sha256-NF0Fj+r6qWcM4VEIm1fzveZuz6MIaG32Z+zBfSMC/t4=";
+  cargoHash = "sha256-5D2+j9nT0IPige4hx49YnnWZMqw0MbPcD1+3DmUEI+A=";
 
   buildAndTestSubdir = "goldboot";
 
@@ -34,6 +39,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     qemu
     qemu-utils
     openssl
+    # libudev-sys, via block-utils
+    udev
+    # winit/egui Wayland backend
+    wayland
+    wayland-protocols
+    libxkbcommon
+    # glutin/glow
+    libGL
   ];
 
   # Tests require networking, so skip them for now
@@ -41,14 +54,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+  # The binary reports the version in Cargo.toml, which is still the last
+  # release; drop this once the pin moves back to a tag.
+  preVersionCheck = "export version=0.0.10";
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     mainProgram = "goldboot";
     description = "Immutable infrastructure for the desktop";
     homepage = "https://github.com/fossable/goldboot";
-    changelog = "https://github.com/fossable/goldboot/releases/tag/goldboot-v${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ cilki ];
