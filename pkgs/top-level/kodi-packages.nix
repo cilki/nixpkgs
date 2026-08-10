@@ -141,6 +141,10 @@ let
 
     screensaver-asteroids = callPackage ../applications/video/kodi/addons/screensaver-asteroids { };
 
+    screensaver-immich-slideshow =
+      callPackage ../applications/video/kodi/addons/screensaver-immich-slideshow
+        { };
+
     skyvideoitalia = callPackage ../applications/video/kodi/addons/skyvideoitalia { };
 
     steam-controller = callPackage ../applications/video/kodi/addons/steam-controller { };
