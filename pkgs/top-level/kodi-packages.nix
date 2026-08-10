@@ -221,6 +221,8 @@ let
 
     inputstreamhelper = callPackage ../applications/video/kodi/addons/inputstreamhelper { };
 
+    iptcinfo3 = callPackage ../applications/video/kodi/addons/iptcinfo3 { };
+
     jurialmunkey = callPackage ../applications/video/kodi/addons/jurialmunkey { };
 
     kodi-six = callPackage ../applications/video/kodi/addons/kodi-six { };
