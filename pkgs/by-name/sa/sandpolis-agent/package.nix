@@ -62,7 +62,7 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "Agent instance for the Sandpolis virtual estate manager";
     homepage = "https://github.com/fossable/sandpolis";
-    license = lib.licenses.agpl3Plus;
+    license = lib.licenses.unlicense;
     mainProgram = "sandpolis-agent";
     maintainers = with lib.maintainers; [ cilki ];
     platforms = lib.platforms.linux;
