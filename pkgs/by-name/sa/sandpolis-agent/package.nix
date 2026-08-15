@@ -1,11 +1,4 @@
-{
-  lib,
-  rustPlatform,
-  sandpolis-server,
-  pkg-config,
-  cmake,
-  udev,
-  openssl,
+{ lib, rustPlatform, sandpolis-server, pkg-config, cmake, udev, openssl, mold,
 }:
 
 # Every instance is built from the same `sandpolis` crate, so the source and
@@ -18,15 +11,9 @@ rustPlatform.buildRustPackage {
   buildAndTestSubdir = "sandpolis";
   buildFeatures = [ "agent" ];
 
-  nativeBuildInputs = [
-    pkg-config
-    cmake
-  ];
+  nativeBuildInputs = [ pkg-config cmake mold ];
 
-  buildInputs = [
-    udev
-    openssl
-  ];
+  buildInputs = [ udev openssl ];
 
   doCheck = false;
 

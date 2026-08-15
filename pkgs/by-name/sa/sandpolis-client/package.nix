@@ -1,69 +1,34 @@
-{
-  lib,
-  rustPlatform,
-  sandpolis-server,
-  pkg-config,
-  cmake,
-  udev,
-  openssl,
-  alsa-lib,
-  fontconfig,
-  freetype,
-  libxkbcommon,
-  vulkan-loader,
-  wayland,
-  fuse3,
-  libx11,
-  libxcursor,
-  libxi,
-  libxrandr,
-}:
+{ lib, rustPlatform, sandpolis-server, pkg-config, cmake, udev, openssl
+, alsa-lib, fontconfig, freetype, libxkbcommon, vulkan-loader, wayland, fuse3
+, libx11, libxcursor, libxi, libxrandr, mold, }:
 
 let
   # Libraries Bevy loads at runtime via dlopen, which therefore have to be
   # reachable through the binary's rpath.
-  runtimeLibs = [
-    vulkan-loader
-    wayland
-    libxkbcommon
-    libx11
-    libxcursor
-    libxi
-    libxrandr
-  ];
-in
-# Every instance is built from the same `sandpolis` crate, so the source and
-# vendored dependencies are shared with sandpolis-server; the client enables the
-# Bevy-based GUI.
-rustPlatform.buildRustPackage {
+  runtimeLibs =
+    [ vulkan-loader wayland libxkbcommon libx11 libxcursor libxi libxrandr ];
+  # Every instance is built from the same `sandpolis` crate, so the source and
+  # vendored dependencies are shared with sandpolis-server; the client enables the
+  # Bevy-based GUI.
+in rustPlatform.buildRustPackage {
   pname = "sandpolis-client";
   inherit (sandpolis-server) version src cargoDeps;
 
   buildAndTestSubdir = "sandpolis";
-  buildFeatures = [ "client-gui" ];
+  buildFeatures = [ "client" ];
 
-  nativeBuildInputs = [
-    pkg-config
-    cmake
-    rustPlatform.bindgenHook
-  ];
+  nativeBuildInputs = [ pkg-config cmake rustPlatform.bindgenHook mold ];
 
-  buildInputs = [
-    udev
-    openssl
-    alsa-lib
-    fontconfig
-    freetype
-    fuse3
-    libxkbcommon
-  ]
-  ++ runtimeLibs;
+  buildInputs = [ udev openssl alsa-lib fontconfig freetype fuse3 libxkbcommon ]
+    ++ runtimeLibs;
 
   doCheck = false;
 
   postInstall = ''
     mv $out/bin/sandpolis $out/bin/sandpolis-client
-    patchelf --add-rpath ${lib.makeLibraryPath runtimeLibs} $out/bin/sandpolis-client
+    patchelf --add-rpath ${
+      lib.makeLibraryPath runtimeLibs
+    } $out/bin/sandpolis-client
   '';
 
   meta = {
