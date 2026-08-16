@@ -7,8 +7,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "fossable";
     repo = "sandpolis";
-    rev = "40cd0a6a3aa1d8ee0e011fc47ff27bae4676d284";
-    hash = "sha256-duVIwsf8t/FUuIhpk6DSTy/ZIh+dpjTDIGQS8a39ST0=";
+    rev = "1dd5dead744250dc986fee5e233f821d7f86f1ef";
+    hash = "sha256-jpiieKH85ONwKE6J1F1cw4j6DEJUCaGc44mCeSIoaF4=";
   };
 
   cargoHash = "sha256-y9S7/HodGPLLpiBcDvhLfNnFTcazf9AUrsdd9/+oA20=";

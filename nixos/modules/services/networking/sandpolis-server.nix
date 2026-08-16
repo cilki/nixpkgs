@@ -26,11 +26,11 @@ let
     # One process is one instance, named by its subcommand.
     "server"
   ]
-  ++ lib.optionals (cfg.serverFile != null) [
+  ++ lib.optionals (cfg.realmCert != null) [
     # The credential, not the original path, so the file itself can stay
     # readable only by root.
-    "--server"
-    "%d/sandpolis.server"
+    "--realm"
+    "%d/sandpolis.realm.pem"
   ]
   ++ lib.optionals (cfg.dataDir != null) [
     "--data"
@@ -57,17 +57,23 @@ in
       type = lib.types.nullOr lib.types.str;
       default = "/var/lib/sandpolis/server";
       description = ''
-        Directory holding the database and the realm files.
+        Directory holding the database and the realm configs.
 
-        Every {file}`*.realm` file in this directory is served, one realm per
-        file, with the filename stem used as the realm name. The server creates
-        {file}`default.realm` if it finds none, so a fresh install comes up
-        serving something. Realm files are mutable state rather than
-        configuration: the server writes a freshly minted realm CA back into its
-        file, and the account and probe layers persist into it as well.
+        Every {file}`*.realm.ron` file in this directory is served, one realm
+        per file, named for the part of the filename before the suffix. The
+        server creates {file}`default.realm.ron` if it finds none, so a fresh
+        install comes up serving something. Realm configs are mutable state
+        rather than configuration: the server writes a freshly minted realm CA
+        back into its file, and the account and probe layers persist into it as
+        well.
 
-        Note that the server only persists accounts when exactly one realm file
-        is loaded, since accounts are not yet realm-scoped upstream.
+        Each start also writes one realm cert per realm to
+        {file}`<realm>.realm.pem` here. That file is what attaches an agent or a
+        client, so this is where {option}`services.sandpolis-agent.realmCert`
+        and {option}`programs.sandpolis-client.realmCert` are copied from.
+
+        Note that the server only persists accounts when exactly one realm
+        config is loaded, since accounts are not yet realm-scoped upstream.
 
         Set to `null` to keep the database entirely in-memory, losing everything
         when the service stops. Such a server has no directory to scan, so it
@@ -97,22 +103,23 @@ in
       '';
     };
 
-    serverFile = lib.mkOption {
+    realmCert = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = null;
-      example = "/var/lib/secrets/sandpolis/ops.server";
+      example = "/var/lib/secrets/sandpolis/ops.realm.pem";
       description = ''
-        Path to a {file}`.server` file naming an upstream server, which makes
-        this a local stratum server rather than the network's global stratum
-        one. The file carries the realm CA along with this server's own
-        certificate, whose common name is the upstream address.
+        Path to a realm cert naming an upstream server, which makes this a local
+        stratum server rather than the network's global stratum one. It carries
+        the realm CA along with this server's own certificate, whose common name
+        is the upstream address, as three PEM blocks.
 
-        Generate one on the global stratum server with
-        {command}`sandpolis-server new-client-cert --realm <file> --address <host:port> --output <file>`.
+        The global stratum server writes one per realm into its
+        {option}`services.sandpolis-server.dataDir` on every start; copy the one
+        for the realm this server should join.
 
         The file is passed through a systemd credential, so it may be owned by
         root and unreadable to anyone else. A local stratum server serves no
-        realms of its own, so any realm file in
+        realms of its own, so any realm config in
         {option}`services.sandpolis-server.dataDir` is ignored while this is set.
       '';
     };
@@ -157,8 +164,8 @@ in
         Restart = "on-failure";
 
         LoadCredential = lib.optional (
-          cfg.serverFile != null
-        ) "sandpolis.server:${toString cfg.serverFile}";
+          cfg.realmCert != null
+        ) "sandpolis.realm.pem:${toString cfg.realmCert}";
 
         DynamicUser = true;
         StateDirectory = lib.optional managedStateDir (lib.removePrefix "/var/lib/" cfg.dataDir);
