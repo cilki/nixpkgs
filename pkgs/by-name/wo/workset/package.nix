@@ -3,7 +3,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "workset";
-  version = "0.3.1-unstable-2026-08-18";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "fossable";
