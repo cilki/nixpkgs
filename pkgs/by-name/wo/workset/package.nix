@@ -1,25 +1,18 @@
-{
-  fetchFromGitHub,
-  rustPlatform,
-  lib,
-  versionCheckHook,
-  pkg-config,
-  nix-update-script,
-  git,
-}:
+{ fetchFromGitHub, rustPlatform, lib, versionCheckHook, pkg-config
+, nix-update-script, git, }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "workset";
-  version = "0.3.0";
+  version = "0.3.1-unstable-2026-08-18";
 
   src = fetchFromGitHub {
     owner = "fossable";
     repo = "workset";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-Ryi5zLlOVNVtHhMZ5PglNFKVrrSlrcj3TOoeHKjGAic=";
+    rev = "850490fafca84c8b97e4fcc02f3fc9746c421181";
+    hash = "sha256-XzHW21GwLJ5kx6iSOw9KsHoAP/zhcCUSKlAIcZ2EU8g=";
   };
 
-  cargoHash = "sha256-VJ1vXEZkOYUGba8hfgdlNpT0QAvHDPdR+TNhDNprKNk=";
+  cargoHash = "sha256-y0fokmohH2R907AphLiCkK4e6S0jc968ZILZuOoFJ+k=";
 
   nativeBuildInputs = [ pkg-config ];
 
