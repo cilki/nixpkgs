@@ -9,7 +9,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "fossable";
     repo = "workset";
     rev = "850490fafca84c8b97e4fcc02f3fc9746c421181";
-    hash = "sha256-XzHW21GwLJ5kx6iSOw9KsHoAP/zhcCUSKlAIcZ2EU8g=";
+    hash = "sha256-+HgBH1ul7AoaiTU5uOzaIrTfHcml8uACNrJASxTmw24=";
   };
 
   cargoHash = "sha256-y0fokmohH2R907AphLiCkK4e6S0jc968ZILZuOoFJ+k=";
