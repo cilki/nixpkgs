@@ -8,8 +8,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "fossable";
     repo = "workset";
-    rev = "d021e3b34ac9dc9c4006b561acbec0571c91955c";
-    hash = "sha256-ujdpbwoeJDYEtkOEajH9qoRe3sfCH5faj7LUVVMCx7I=";
+    rev = "100e668c9cd97f58a0cf509ab7a39d260974bc09";
+    hash = "sha256-pYQNMrsFRzsITnM3G2pvmz7YlsYDCqxmuRtKtUQmb+s=";
   };
 
   cargoHash = "sha256-y0fokmohH2R907AphLiCkK4e6S0jc968ZILZuOoFJ+k=";
