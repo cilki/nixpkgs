@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 let
   cfg = config.services.sandpolis-server;
@@ -11,43 +6,23 @@ let
   # systemd creates and owns this directory for us when it sits in a place it
   # manages; anywhere else it becomes the administrator's problem and just has
   # to be made writable through the sandbox.
-  managedStateDir = cfg.dataDir != null && lib.hasPrefix "/var/lib/" cfg.dataDir;
+  managedStateDir = cfg.dataDir != null
+    && lib.hasPrefix "/var/lib/" cfg.dataDir;
 
-  logFlag =
-    {
-      info = [ ];
-      debug = [ "--debug" ];
-      trace = [ "--trace" ];
-    }
-    .${cfg.logLevel};
+  logFlag = {
+    info = [ ];
+    debug = [ "--debug" ];
+    trace = [ "--trace" ];
+  }.${cfg.logLevel};
 
   args = [
     (lib.getExe cfg.package)
     # One process is one instance, named by its subcommand.
     "server"
-  ]
-  ++ lib.optionals (cfg.realmCert != null) [
-    # The credential, not the original path, so the file itself can stay
-    # readable only by root.
-    "--realm"
-    "%d/sandpolis.realm.pem"
-  ]
-  ++ lib.optionals (cfg.dataDir != null) [
-    "--data"
-    cfg.dataDir
-  ]
-  ++ [
-    "--listen"
-    "${cfg.address}:${toString cfg.port}"
-  ]
-  ++ lib.concatMap (ip: [
-    "--blocked-ips"
-    ip
-  ]) cfg.blockedIps
-  ++ logFlag
-  ++ cfg.extraArgs;
-in
-{
+  ] ++ lib.optionals (cfg.dataDir != null) [ "--data" cfg.dataDir ]
+    ++ [ "--listen" "${cfg.address}:${toString cfg.port}" ] ++ logFlag
+    ++ cfg.extraArgs;
+in {
   options.services.sandpolis-server = {
     enable = lib.mkEnableOption "Sandpolis server";
 
@@ -69,7 +44,7 @@ in
 
         Each start also writes one realm cert per realm to
         {file}`<realm>.realm.pem` here. That file is what attaches an agent or a
-        client, so this is where {option}`services.sandpolis-agent.realmCert`
+        client, so this is where {option}`services.sandpolis-agent.realm`
         and {option}`programs.sandpolis-client.realmCert` are copied from.
 
         Note that the server only persists accounts when exactly one realm
@@ -93,43 +68,8 @@ in
       description = "Port the server listens on.";
     };
 
-    blockedIps = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
-      default = [ ];
-      example = [ "192.0.2.1" ];
-      description = ''
-        IP addresses denied access to the server, rejected before
-        authentication runs.
-      '';
-    };
-
-    realmCert = lib.mkOption {
-      type = lib.types.nullOr lib.types.path;
-      default = null;
-      example = "/var/lib/secrets/sandpolis/ops.realm.pem";
-      description = ''
-        Path to a realm cert naming an upstream server, which makes this a local
-        stratum server rather than the network's global stratum one. It carries
-        the realm CA along with this server's own certificate, whose common name
-        is the upstream address, as three PEM blocks.
-
-        The global stratum server writes one per realm into its
-        {option}`services.sandpolis-server.dataDir` on every start; copy the one
-        for the realm this server should join.
-
-        The file is passed through a systemd credential, so it may be owned by
-        root and unreadable to anyone else. A local stratum server serves no
-        realms of its own, so any realm config in
-        {option}`services.sandpolis-server.dataDir` is ignored while this is set.
-      '';
-    };
-
     logLevel = lib.mkOption {
-      type = lib.types.enum [
-        "info"
-        "debug"
-        "trace"
-      ];
+      type = lib.types.enum [ "info" "debug" "trace" ];
       default = "info";
       description = ''
         Verbosity of the server's logs. For finer control, set `RUST_LOG` in
@@ -151,7 +91,27 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    networking.firewall.allowedTCPPorts = lib.optional cfg.openFirewall cfg.port;
+    networking.firewall.allowedTCPPorts =
+      lib.optional cfg.openFirewall cfg.port;
+
+    # The server logs a canonical "Authentication failure" line at WARN for
+    # every failed login, token, or client-certificate check, which fail2ban
+    # turns into firewall bans; this replaces the in-application blocklist the
+    # server used to keep.
+    services.fail2ban.jails.sandpolis-server =
+      lib.mkIf config.services.fail2ban.enable {
+        filter.Definition = {
+          failregex = "^.*WARN.*Authentication failure.*peer=<HOST>\\b";
+          journalmatch = "_SYSTEMD_UNIT=sandpolis-server.service";
+        };
+        settings = {
+          port = cfg.port;
+          backend = "systemd";
+          maxretry = lib.mkDefault 5;
+          findtime = lib.mkDefault "10m";
+          bantime = lib.mkDefault "1h";
+        };
+      };
 
     systemd.services.sandpolis-server = {
       description = "Sandpolis server";
@@ -163,14 +123,12 @@ in
         ExecStart = lib.escapeShellArgs args;
         Restart = "on-failure";
 
-        LoadCredential = lib.optional (
-          cfg.realmCert != null
-        ) "sandpolis.realm.pem:${toString cfg.realmCert}";
-
         DynamicUser = true;
-        StateDirectory = lib.optional managedStateDir (lib.removePrefix "/var/lib/" cfg.dataDir);
+        StateDirectory = lib.optional managedStateDir
+          (lib.removePrefix "/var/lib/" cfg.dataDir);
         StateDirectoryMode = "0700";
-        ReadWritePaths = lib.optional (cfg.dataDir != null && !managedStateDir) cfg.dataDir;
+        ReadWritePaths =
+          lib.optional (cfg.dataDir != null && !managedStateDir) cfg.dataDir;
 
         # Hardening
         NoNewPrivileges = true;
@@ -181,11 +139,7 @@ in
         ProtectControlGroups = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        RestrictAddressFamilies = [
-          "AF_INET"
-          "AF_INET6"
-          "AF_UNIX"
-        ];
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
         RestrictNamespaces = true;
         LockPersonality = true;
         SystemCallArchitectures = "native";

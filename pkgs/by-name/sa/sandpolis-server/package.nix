@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sandpolis-server";
-  version = "8.0.0-unstable-2026-08-15";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "fossable";
     repo = "sandpolis";
-    rev = "1dd5dead744250dc986fee5e233f821d7f86f1ef";
-    hash = "sha256-jpiieKH85ONwKE6J1F1cw4j6DEJUCaGc44mCeSIoaF4=";
+    rev = "23bbf8660cee9a8e38709d98d853c22202da544d";
+    hash = "sha256-Y+lgjOUdR1uVJClzSSNwQAeBGEHbxys739dDjoZ+H3Y=";
   };
 
-  cargoHash = "sha256-mtQiv2+FLty9McMI4txqQgHm3L8e5LUryoiiuj0Hj3c=";
+  cargoHash = "sha256-euz0poG3snDwne4L7ndMbAmgTYmyi4YWPOufu8A0/WU=";
 
   buildAndTestSubdir = "sandpolis";
   buildFeatures = [ "server" ];
