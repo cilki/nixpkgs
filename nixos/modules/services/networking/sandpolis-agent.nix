@@ -199,19 +199,28 @@ in {
 
         LoadCredential = [ "sandpolis.realm.pem:${toString cfg.realm}" ];
 
-        DynamicUser = true;
+        # Runs as root. The agent reaches deep into the host — rebooting the
+        # machine (CAP_SYS_BOOT), reading privileged sensors — which a dynamic
+        # user can't do, so the sandbox below is deliberately looser than the
+        # server's.
         StateDirectory = lib.optional managedStateDir
           (lib.removePrefix "/var/lib/" cfg.dataDir);
         StateDirectoryMode = "0700";
         ReadWritePaths =
           lib.optional (cfg.dataDir != null && !managedStateDir) cfg.dataDir;
 
-        # Hardening. The agent inspects the host, so the sandbox is deliberately
-        # looser than the server's.
+        # Hardening. NoNewPrivileges stays on even as root; rebooting relies on
+        # the inherited CAP_SYS_BOOT, not on gaining privileges.
         NoNewPrivileges = true;
         ProtectSystem = "strict";
         ProtectControlGroups = true;
         LockPersonality = true;
+
+        # Desktop capture needs the X11 socket in /tmp/.X11-unix, so leave the
+        # host's /tmp in place rather than mounting a private one. CPU
+        # temperatures come from hwmon under /sys, which ProtectSystem leaves
+        # readable, so they need nothing further.
+        PrivateTmp = false;
       };
     };
   };
