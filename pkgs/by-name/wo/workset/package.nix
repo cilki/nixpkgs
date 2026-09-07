@@ -6,10 +6,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.3.1";
 
   src = fetchFromGitHub {
-    owner = "fossable";
+    owner = "cilki";
     repo = "workset";
-    rev = "b99b583ed805a1f43c0cef91597626d1b64d4b66";
-    hash = "sha256-tRXb3Vaio6NZ/wju2tI9nZY5EmTf8X2yMuU/8Knipag=";
+    rev = "12a00ac8007e863b622bed66e2e8fd1833918436";
+    hash = "sha256-KxMp4fbbbCWkahy914npHuRgX/B9QcwwofUJhjBxAps=";
   };
 
   cargoHash = "sha256-y0fokmohH2R907AphLiCkK4e6S0jc968ZILZuOoFJ+k=";
