@@ -5,10 +5,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "8.0.0";
 
   src = fetchFromGitHub {
-    owner = "fossable";
+    owner = "cilki";
     repo = "sandpolis";
-    rev = "0d8b7bff30a27e14a1135a4fdae9c70668db22e6";
-    hash = "sha256-WE0euC49D70/qqssQbWi30j+4GUyBKRP7KjgHpC340o=";
+    rev = "d2cbb47197ab35168fc36ef72d98509934912405";
+    hash = "sha256-FcqdPsBIztVxHtV401L1omVBAynrHyenSfZMLYdRF0E=";
   };
 
   cargoHash = "sha256-RFbhB3LS2etkaXQwcZ/HF4f9/kZKOziU0WrQGVWuW1c=";
