@@ -19,13 +19,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "goldboot";
-  version = "0.0.10-unstable-2026-08-05";
+  version = "0.0.10";
 
   src = fetchFromGitHub {
-    owner = "fossable";
+    owner = "cilki";
     repo = "goldboot";
-    rev = "f8c1c48e066205369846242896e157d0eef2b144";
-    hash = "sha256-OnfbU7nN6x3Ksy74SxVrvoz2nonwHyGOwoLndY22C4E=";
+    rev = "517db6943c13bbfcfa1a111052b805ed561bd7ac";
+    hash = "sha256-iPZ6NwU9eLai1cm+z+8+xxtudEA/5anszC0OPGz2i0Q=";
   };
 
   cargoHash = "sha256-5D2+j9nT0IPige4hx49YnnWZMqw0MbPcD1+3DmUEI+A=";
