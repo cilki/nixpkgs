@@ -13,10 +13,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "fossable";
+    owner = "cilki";
     repo = "attest";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-fc/kzBKuaTIZQd/RD3xWyZfpzP9eMER0FnBgouJVVZM=";
+    tag = "3c12213f59cd13ff54fc415ba153c815e8bc1c17";
+    hash = "sha256-c1ibpul1+gGjajqKfbN9ykBhfLCd2BPVcypzQLmSWoM=";
   };
 
   cargoHash = "sha256-RN8L5HlYshgmfEqkHAfLAnHZVqWlQ4YDyQXfICg/Dtg=";
