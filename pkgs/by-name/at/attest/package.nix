@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "cilki";
     repo = "attest";
-    tag = "3c12213f59cd13ff54fc415ba153c815e8bc1c17";
+    rev = "3c12213f59cd13ff54fc415ba153c815e8bc1c17";
     hash = "sha256-c1ibpul1+gGjajqKfbN9ykBhfLCd2BPVcypzQLmSWoM=";
   };
 
