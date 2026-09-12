@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-FcqdPsBIztVxHtV401L1omVBAynrHyenSfZMLYdRF0E=";
   };
 
-  cargoHash = "sha256-RFbhB3LS2etkaXQwcZ/HF4f9/kZKOziU0WrQGVWuW1c=";
+  cargoHash = "sha256-plET4P05vPGScWz7ZkwtNh/AvZjNvUSC8JImvZ3iDow=";
 
   buildAndTestSubdir = "sandpolis";
   buildFeatures = [ "server" ];
