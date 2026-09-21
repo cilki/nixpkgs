@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, }:
+{ lib, rustPlatform, fetchFromGitHub, git, }:
 
 rustPlatform.buildRustPackage {
   pname = "codemine";
@@ -7,11 +7,13 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "cilki";
     repo = "codemine";
-    rev = "5b369d178126601c69da17a8d11063151303cb2f";
-    hash = "sha256-P2uzPeDEW+YefYnHGLo1lrD7OdL/QDxPby275jhpeuQ=";
+    rev = "291ebc2d05c4dbeb3c73196d3019845da074f179";
+    hash = "sha256-H/ilSbFUg9FQpzOdZ6mGeUSJAMzg7OPjtUrTeO6rn/0=";
   };
 
   cargoHash = "sha256-PvLGpktBYxD4F5cNkWAQTBiiA8bkNNfgkuAhj15UcoE=";
+
+  nativeCheckInputs = [ git ];
 
   meta = {
     description = "Turn AI agents into code-mining bots";
