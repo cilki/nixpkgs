@@ -1,8 +1,4 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-}:
+{ lib, rustPlatform, fetchFromGitHub, }:
 
 rustPlatform.buildRustPackage {
   pname = "codemine";
@@ -11,8 +7,8 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "cilki";
     repo = "codemine";
-    rev = "bb241c5f80c3771fd0a2712235f225e614dc3758";
-    hash = "sha256-Ko/H9pEAQipE0gTDjHQHddJ5or/W6B/s2uM0BWIkSfE=";
+    rev = "5b369d178126601c69da17a8d11063151303cb2f";
+    hash = "sha256-P2uzPeDEW+YefYnHGLo1lrD7OdL/QDxPby275jhpeuQ=";
   };
 
   cargoHash = "sha256-PvLGpktBYxD4F5cNkWAQTBiiA8bkNNfgkuAhj15UcoE=";
