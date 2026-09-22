@@ -96,8 +96,13 @@ in
           preStart = ''
             pkg=${pkgs.opencode-claude-auth}/lib/node_modules/opencode-claude-auth
             main=$(${lib.getExe pkgs.jq} -r '.main // "index.js"' "$pkg/package.json")
-            mkdir -p /root/.config/opencode/plugins
-            ln -sf "$pkg/$main" /root/.config/opencode/plugins/opencode-claude-auth.js
+            # codemine links the plugin at plugin/opencode-claude-auth.js when
+            # it can find the package itself; use the same path so the two
+            # mechanisms can never load two copies. An earlier version linked
+            # under plugins/ (also scanned by opencode), so drop that too.
+            rm -f /root/.config/opencode/plugins/opencode-claude-auth.js
+            mkdir -p /root/.config/opencode/plugin
+            ln -sf "$pkg/$main" /root/.config/opencode/plugin/opencode-claude-auth.js
           '';
 
           serviceConfig = {
