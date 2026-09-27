@@ -7,8 +7,8 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "cilki";
     repo = "codemine";
-    rev = "78c49c0f5e43d9d0dfd101bf6a6bf7b2751a8b32";
-    hash = "sha256-5a0xWGkZv5Bc4eOhb0kXaMmFMnXV8MqG7FLGNGwgrpg=";
+    rev = "910facd9f8ed6f0f7010f9b0a226038e9d22bb02";
+    hash = "sha256-YDELQ2pW4xwIs9X+v/DlQrNvqBuRrkgPo6pYGy0gl7c=";
   };
 
   cargoHash = "sha256-mqE8VXqyNYg/BHN3ne8G8aVwh4SWFc7iB2Nh1vmwC80=";
