@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "codemine";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "cilki";
     repo = "codemine";
-    rev = "b4120b3f6ae4567df8ba5f0ff622f5876bcf250a";
-    hash = "sha256-qUVsYsP6uuQeoCEq2mxPLn/bkiDXRy1VxrOzqLYO+38=";
+    rev = "49b55aa5cfe7506b9e0f98ed508a9b8a56a84e32";
+    hash = "sha256-KkzVs7iusZSTJY3txjw2UbFiFFJuBvr5LV+LCREiAh4=";
   };
 
-  cargoHash = "sha256-NBBGxOdeC4ILtVvWF46aBaDPiac43faW1qwn7BDMpmM=";
+  cargoHash = "sha256-bA400oxKDLR1HskGDwoR/5cp2UhN84bJOGJoPJRHlso=";
 
   nativeCheckInputs = [ git ];
 
