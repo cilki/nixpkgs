@@ -61,41 +61,22 @@ in
           wants = [
             "network-online.target"
           ]
-          ++ lib.optional (config.services ? cliproxyapi && config.services.cliproxyapi.enable) "cliproxyapi.service";
+          ++ lib.optional (
+            config.services ? cliproxyapi && config.services.cliproxyapi.enable
+          ) "cliproxyapi.service";
           after = [
             "network-online.target"
           ]
-          ++ lib.optional (config.services ? cliproxyapi && config.services.cliproxyapi.enable) "cliproxyapi.service";
+          ++ lib.optional (
+            config.services ? cliproxyapi && config.services.cliproxyapi.enable
+          ) "cliproxyapi.service";
 
           # codemine runs `git config --system`, which would otherwise try to
           # write to the read-only nix store (or clobber /etc/gitconfig).
           environment.GIT_CONFIG_SYSTEM = "/var/lib/codemine/gitconfig";
 
           # Mirrors the tool set of the project's Docker image (nix/runtime.nix).
-          path =
-            (with pkgs; [
-              bash
-              coreutils
-              gnugrep
-              gnused
-              findutils
-              git
-              jq
-              curl
-              ripgrep
-              util-linux
-              tea
-              gh
-              glab
-              opencode
-              codegraph
-              cargo
-              rustc
-              clippy
-              rustfmt
-              gnumake
-            ])
-            ++ cfg.extraPackages;
+          path = cfg.package.runtimeDeps ++ cfg.extraPackages;
 
           serviceConfig = {
             ExecStart = "${lib.getExe cfg.package} --listen ${cfg.listen} --workspace /var/lib/codemine";

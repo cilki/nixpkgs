@@ -1,4 +1,35 @@
-{ lib, rustPlatform, fetchFromGitHub, git, }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  bash,
+  coreutils,
+  diffutils,
+  gawk,
+  which,
+  gnugrep,
+  gnused,
+  findutils,
+  git,
+  jq,
+  curl,
+  ripgrep,
+  util-linux,
+  tea,
+  gh,
+  glab,
+  opencode,
+  codegraph,
+  cargo,
+  rustc,
+  clippy,
+  rustfmt,
+  gcc,
+  gnumake,
+  python3,
+  hyperfine,
+  rtk,
+}:
 
 rustPlatform.buildRustPackage {
   pname = "codemine";
@@ -7,13 +38,46 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "cilki";
     repo = "codemine";
-    rev = "86921f8ad0ee38e0b366cf35fa5f1240de5767b4";
-    hash = "sha256-J71mlojWd6FSPXJdOCjllmhtP1QCL6dsFAn1yUkCp5c=";
+    rev = "aac84c30d1bb5ed7b9a9c15236a664eb952ffa2d";
+    hash = "sha256-Ega+Ox4/bOO8mcY74+K+TaK9LuOze3FFT7pbzVm7HAA=";
   };
 
   cargoHash = "sha256-Bjt0wmtexWuTGKi+Hnr2wFfle68koh0o4ySs3JJMhHc=";
 
   nativeCheckInputs = [ git ];
+
+  # Tools available to the agent at runtime, used by the NixOS module.
+  # Keep in sync with upstream's nix/runtime.nix when bumping `rev`
+  # (cliproxyapi is omitted: the module expects services.cliproxyapi).
+  passthru.runtimeDeps = [
+    bash
+    coreutils
+    diffutils
+    gawk
+    which
+    gnugrep
+    gnused
+    findutils
+    git
+    jq
+    curl
+    ripgrep
+    util-linux
+    tea
+    gh
+    glab
+    opencode
+    codegraph
+    cargo
+    rustc
+    clippy
+    rustfmt
+    gcc
+    gnumake
+    python3
+    hyperfine
+    rtk
+  ];
 
   meta = {
     description = "Turn AI agents into code-mining bots";
