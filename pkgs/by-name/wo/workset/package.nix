@@ -8,11 +8,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "cilki";
     repo = "workset";
-    rev = "7ac9ee6a2cda5788647af90a2ca9b4ed7b8e701c";
-    hash = "sha256-hlUb46+c6HkLzFUe4mf3QaRq6O5bo6ucNH8Ns69gZew=";
+    rev = "5fb1f1fa2c2e2602c4debc49b07089a257c4cce4";
+    hash = "sha256-fjU5renZPLG/XZmuc4y2Z34v10D24NtCvRHyXVkYajk=";
   };
 
-  cargoHash = "sha256-sJxu2utyY8OWlkvjHcy+OTGfODu2mD+IYykpc+b2oTE=";
+  cargoHash = "sha256-PhGLMPDs7ktSe85TdnfwM9hNhd2dnykVrJu5Hy4rOng=";
 
   nativeBuildInputs = [ pkg-config ];
 
