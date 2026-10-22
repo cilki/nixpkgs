@@ -58,53 +58,28 @@ in
         systemd.services.codemine = {
           description = "codemine agent runner";
           wantedBy = [ "multi-user.target" ];
-          wants = [ "network-online.target" ];
-          after = [ "network-online.target" ];
+          wants = [
+            "network-online.target"
+          ]
+          ++ lib.optional (
+            config.services ? cliproxyapi && config.services.cliproxyapi.enable
+          ) "cliproxyapi.service";
+          after = [
+            "network-online.target"
+          ]
+          ++ lib.optional (
+            config.services ? cliproxyapi && config.services.cliproxyapi.enable
+          ) "cliproxyapi.service";
 
           # codemine runs `git config --system`, which would otherwise try to
           # write to the read-only nix store (or clobber /etc/gitconfig).
           environment.GIT_CONFIG_SYSTEM = "/var/lib/codemine/gitconfig";
 
           # Mirrors the tool set of the project's Docker image (nix/runtime.nix).
-          path =
-            (with pkgs; [
-              bash
-              coreutils
-              gnugrep
-              gnused
-              findutils
-              git
-              jq
-              curl
-              ripgrep
-              util-linux
-              tea
-              gh
-              glab
-              opencode
-              codegraph
-              cargo
-              rustc
-              clippy
-              rustfmt
-              gnumake
-            ])
-            ++ cfg.extraPackages;
-
-          # Load the Claude OAuth plugin from the nix store so opencode never has
-          # to fetch it from npm at startup.
-          preStart = ''
-            pkg=${pkgs.opencode-claude-auth}/lib/node_modules/opencode-claude-auth
-            main=$(${lib.getExe pkgs.jq} -r '.main // "index.js"' "$pkg/package.json")
-            mkdir -p /root/.config/opencode/plugins
-            ln -sf "$pkg/$main" /root/.config/opencode/plugins/opencode-claude-auth.js
-          '';
+          path = cfg.package.runtimeDeps ++ cfg.extraPackages;
 
           serviceConfig = {
             ExecStart = "${lib.getExe cfg.package} --listen ${cfg.listen} --workspace /var/lib/codemine";
-            # codemine expects to run as root: it validates the Claude OAuth
-            # credentials at /root/.claude/.credentials.json and writes the
-            # forge credentials to /root/.git-credentials.
             WorkingDirectory = "/root";
             StateDirectory = "codemine";
             Restart = "always";
