@@ -1,10 +1,4 @@
-{
-  fetchFromGitHub,
-  rustPlatform,
-  lib,
-  versionCheckHook,
-  nix-update-script,
-}:
+{ fetchFromGitHub, rustPlatform, lib, versionCheckHook, nix-update-script, }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "attest";
@@ -15,11 +9,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "cilki";
     repo = "attest";
-    rev = "3c12213f59cd13ff54fc415ba153c815e8bc1c17";
-    hash = "sha256-c1ibpul1+gGjajqKfbN9ykBhfLCd2BPVcypzQLmSWoM=";
+    rev = "7d53ecc87bdb4839db5a8c739969ba92f889c14f";
+    hash = "sha256-+hBgT1R12lG6jTDAu48pdn+atfOi/vTfbwAHQzoAGVE=";
   };
 
-  cargoHash = "sha256-RN8L5HlYshgmfEqkHAfLAnHZVqWlQ4YDyQXfICg/Dtg=";
+  cargoHash = "sha256-qA+XbpULpXXJmO9eHXm3ZkWT9StafSFoLHiDVmFqgSg=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
