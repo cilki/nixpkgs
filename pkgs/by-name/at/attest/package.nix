@@ -2,18 +2,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "attest";
-  version = "0.5.5";
+  version = "0.6.0";
 
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cilki";
     repo = "attest";
-    rev = "7d53ecc87bdb4839db5a8c739969ba92f889c14f";
-    hash = "sha256-+hBgT1R12lG6jTDAu48pdn+atfOi/vTfbwAHQzoAGVE=";
+    rev = "d2dbc5241b119b33c04e7c11407ca32d3ececdee";
+    hash = "sha256-kwC5yzaPcVl8s4eYG27qJ4P0eiHe9T26CHYd2mIK2Ec=";
   };
 
-  cargoHash = "sha256-qA+XbpULpXXJmO9eHXm3ZkWT9StafSFoLHiDVmFqgSg=";
+  cargoHash = "sha256-5lGg3djyowhOFHHoZ8ibBcgzsX8BRJz6YdY5HT6B2LU=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
