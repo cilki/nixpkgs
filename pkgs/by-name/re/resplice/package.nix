@@ -7,12 +7,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "cilki";
-    repo= "resplice";
-    rev= "39c9df8bfae799fd3e0e8969a5958ee84edfe166";
-    hash= "sha256-D1p/Zw9lzgpyJYvddXo1Bo/JpYHMERNmVoN1UA+Op/k=";
+    repo = "resplice";
+    rev = "2dfebb5c6ddfea9d33916428549a11bbaa2ce499";
+    hash = "sha256-yCd+9jcLk2VU9WC3YmYcNOBAUyvBcPG/XIM1KZ747qI=";
   };
 
-  cargoHash = "sha256-F8nhgOfNKS2V3qlm7ZW5ShcH4XllKQSjXUpnfIObz0M=";
+  cargoHash = "sha256-2+NqrWYYvSiMrJZmCvu05hUrRsJywGiV23qIRysPe1E=";
 
   nativeBuildInputs = [ pkg-config ];
 
