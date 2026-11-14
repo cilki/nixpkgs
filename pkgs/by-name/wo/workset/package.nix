@@ -3,16 +3,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "workset";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "cilki";
     repo = "workset";
-    rev = "5fb1f1fa2c2e2602c4debc49b07089a257c4cce4";
-    hash = "sha256-fjU5renZPLG/XZmuc4y2Z34v10D24NtCvRHyXVkYajk=";
+    rev = "6532b68c60fe437801cbb052e9d37abfddcd0702";
+    hash = "sha256-kkqGroAGJDzjBL9FJFs9GqLts9q+RaP/pxYVYV9dKxA=";
   };
 
-  cargoHash = "sha256-PhGLMPDs7ktSe85TdnfwM9hNhd2dnykVrJu5Hy4rOng=";
+  cargoHash = "sha256-RvBuH7TNyvqUWopBq1ySC2fK36CSgqwm/e21pCD5fRs=";
 
   nativeBuildInputs = [ pkg-config ];
 
