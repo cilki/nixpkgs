@@ -8,8 +8,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "cilki";
     repo = "resplice";
-    rev = "2dfebb5c6ddfea9d33916428549a11bbaa2ce499";
-    hash = "sha256-yCd+9jcLk2VU9WC3YmYcNOBAUyvBcPG/XIM1KZ747qI=";
+    rev = "e9d46ddf9dbd04edb52660ea5d4e54bfa55292b5";
+    hash = "sha256-04CIrs2qce+bfsazAluXuguHfFMocL7rki8wJuEJuiI=";
   };
 
   cargoHash = "sha256-2+NqrWYYvSiMrJZmCvu05hUrRsJywGiV23qIRysPe1E=";
