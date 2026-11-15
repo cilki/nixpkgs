@@ -594,6 +594,7 @@ in
   fluidd = runTest ./fluidd.nix;
   fontconfig-bitmap-fonts = runTest ./fontconfig-bitmap-fonts.nix;
   fontconfig-default-fonts = runTest ./fontconfig-default-fonts.nix;
+  fossdb = runTest ./fossdb.nix;
   forgejo = import ./forgejo.nix {
     inherit runTest;
     forgejoPackage = pkgs.forgejo;
