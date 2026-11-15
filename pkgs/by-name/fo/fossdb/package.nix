@@ -2,17 +2,16 @@
 , nixosTests, }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fossdb";
-  version = "0.0.1-unstable-2026-11-15";
+  version = "0.0.1";
 
   src = fetchFromGitHub {
-    owner = "fossable";
+    owner = "cilki";
     repo = "fossdb";
-    # FIXME: update once the user-id authentication rewrite is pushed.
-    rev = "3dd92d645cfc0536926dbad5a1f22fd48b19694f";
-    hash = lib.fakeHash;
+    rev = "94c05298f580473588ebe519c67583c84b8445c9";
+    hash = "sha256-LFxmODzzkPq4PnJeUkf/NUcsAvfMuOSFb5X10k9kzAk=";
   };
 
-  cargoHash = lib.fakeHash;
+  cargoHash = "sha256-IZSW6JugPLSllSJVsVENJn6pWsBNi5/KvytQ7uTp9rs=";
 
   # One vendored dependency set, shared with the frontend derivation below, so
   # there is a single hash to maintain for the whole workspace.
