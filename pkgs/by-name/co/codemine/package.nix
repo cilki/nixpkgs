@@ -10,11 +10,11 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "cilki";
     repo = "codemine";
-    rev = "c527df31fd05d45a8922e3ac7d5c949a84b9562d";
-    hash = "sha256-Z4e5xjZF+jH/09+uRz7fl5J5J/x2mevHUwlLF9/gSqs=";
+    rev = "bb0452d80a28a94e8d8b739664fb060403451be7";
+    hash = "sha256-JbdAM3hPWpt+xYDVeY00w5pRUuELyUtCmKkJIAtjY58=";
   };
 
-  cargoHash = "sha256-WXd+OTVV9OXfSjLfK3QDQFlhukSYMrkgJcy1pNMVboI=";
+  cargoHash = "sha256-uglL5leMEYC+QPtzbl/RqtVuCh3xRZrJMrTzGqJTfOE=";
 
   nativeCheckInputs = [ git ];
 
