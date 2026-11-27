@@ -1,7 +1,35 @@
-{ lib, rustPlatform, fetchFromGitHub, bash, coreutils, diffutils, gawk, which
-, gnugrep, gnused, findutils, git, jq, curl, ripgrep, util-linux, tea, gh, glab
-, opencode, codegraph, cargo, rustc, clippy, rustfmt, gcc, gnumake, python3
-, hyperfine, rtk, }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  bash,
+  coreutils,
+  diffutils,
+  gawk,
+  which,
+  gnugrep,
+  gnused,
+  findutils,
+  git,
+  jq,
+  curl,
+  ripgrep,
+  util-linux,
+  tea,
+  gh,
+  glab,
+  opencode,
+  codegraph,
+  cargo,
+  rustc,
+  clippy,
+  rustfmt,
+  gcc,
+  gnumake,
+  python3,
+  hyperfine,
+  rtk,
+}:
 
 rustPlatform.buildRustPackage {
   pname = "codemine";
@@ -10,8 +38,8 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "cilki";
     repo = "codemine";
-    rev = "bb0452d80a28a94e8d8b739664fb060403451be7";
-    hash = "sha256-JbdAM3hPWpt+xYDVeY00w5pRUuELyUtCmKkJIAtjY58=";
+    rev = "bf954de3b68acb9ee6521577c2771365f6219235";
+    hash = "sha256-VPvWJm/CM9i2R8UgCdStQUN5cPZb1xO27lxRVR4gLv8=";
   };
 
   cargoHash = "sha256-uglL5leMEYC+QPtzbl/RqtVuCh3xRZrJMrTzGqJTfOE=";
