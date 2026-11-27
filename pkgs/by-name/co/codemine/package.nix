@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  sqlite,
   bash,
   coreutils,
   diffutils,
@@ -38,11 +40,15 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "cilki";
     repo = "codemine";
-    rev = "bf954de3b68acb9ee6521577c2771365f6219235";
-    hash = "sha256-VPvWJm/CM9i2R8UgCdStQUN5cPZb1xO27lxRVR4gLv8=";
+    rev = "6865e6fbacfc2727e86b923bab0c9156cf6190b0";
+    hash = "sha256-vH7FpWkUWwnEDO+oeiHk8K1LxUOmYNVypvQJ4RRMCgA=";
   };
 
   cargoHash = "sha256-uglL5leMEYC+QPtzbl/RqtVuCh3xRZrJMrTzGqJTfOE=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ sqlite ];
 
   nativeCheckInputs = [ git ];
 
