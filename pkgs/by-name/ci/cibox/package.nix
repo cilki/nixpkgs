@@ -8,11 +8,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "fossable";
     repo = "cibox";
-    rev = "fdf446a272cbd2c2eddd0d8dd1326b9b12739244";
-    hash = "sha256-xif2VBPG7SLrhE4vqtXofJKmxzxYziMSxsHP/G4JGWI=";
+    rev = "39c886f9efb07550719ba50a0a1c7d082cad30c3";
+    hash = "sha256-jbnsbzrtwVtAths0nxBhcUVDUZNNv9QKec3U3IAV+M0=";
   };
 
-  cargoHash = "sha256-Bh1Pe1cwUPVCelpMDx9GeYL0N55a24iDq3PFY8Ceqds=";
+  cargoHash = "sha256-YwNjYao5w8+xZNJ5/I64OXhEH8JZ9MN/fgJI9S9gW78=";
 
   nativeBuildInputs = [ pkg-config ];
 
