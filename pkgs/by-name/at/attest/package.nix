@@ -9,11 +9,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "cilki";
     repo = "attest";
-    rev = "eafd44b278466c61149c11f1e02a84381ef774ce";
-    hash = "sha256-X+ZctyjhFhTU57OekjuPxy+rjSbyjSDT7ORsKD6RYQE=";
+    rev = "8dc6f5d8b2875453eb03159910f6a91789343ba0";
+    hash = "sha256-7bJQfSU/32dYiwwK2XQQlC+s0xdYf2xiUlwDsmlW2pE=";
   };
 
-  cargoHash = "sha256-5lGg3djyowhOFHHoZ8ibBcgzsX8BRJz6YdY5HT6B2LU=";
+  cargoHash = "sha256-c0hMi0Mlk34gqcYZXRy+k3CGpi74o2YL3Fy5vuZWHVQ=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
