@@ -10,13 +10,13 @@
 buildKodiAddon rec {
   pname = "screensaver-immich-slideshow";
   namespace = "screensaver.immich.slideshow";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "smfontes";
     repo = namespace;
     rev = version;
-    hash = "sha256-a55tQEhkPBZ6U8I5jVGeBaDKPVlMhcnsp6yMJwaUlx8=";
+    hash = "sha256-n9XD7oT3XkEWf+D/VOMEyi3yZOH1V+GgV0TTcshjiWM=";
   };
 
   propagatedBuildInputs = [
