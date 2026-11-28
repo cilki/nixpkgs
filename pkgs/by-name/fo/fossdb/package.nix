@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, rustPlatform, dioxus-cli, wasm-bindgen-cli, binaryen
-, nixosTests, }:
+, nixosTests, cacert, }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fossdb";
   version = "0.0.1";
@@ -7,11 +7,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "cilki";
     repo = "fossdb";
-    rev = "94c05298f580473588ebe519c67583c84b8445c9";
-    hash = "sha256-LFxmODzzkPq4PnJeUkf/NUcsAvfMuOSFb5X10k9kzAk=";
+    rev = "1925e5d9d5a08a1f32e6ef537937bc1aadfea95d";
+    hash = "sha256-sPn//NIrkSkyhzDKN1rHlC/Ejqa96O79vF4LBsx2BNw=";
   };
 
-  cargoHash = "sha256-IZSW6JugPLSllSJVsVENJn6pWsBNi5/KvytQ7uTp9rs=";
+  cargoHash = "sha256-oZ4ymjx6WuNjdu5Sw6ZWZ7+I4fsCSQjDYvI3MBfaI+8=";
 
   # One vendored dependency set, shared with the frontend derivation below, so
   # there is a single hash to maintain for the whole workspace.
@@ -39,6 +39,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildFeatures = [ "fossdb-cli/admin" ];
 
   cargoTestFlags = finalAttrs.cargoBuildFlags;
+
+  # fossdb-collector's client tests build a reqwest client, which loads the
+  # system CA certificates and fails without them.
+  nativeCheckInputs = [ cacert ];
 
   passthru = {
     # Dioxus/wasm single-page app, served by a web server rather than by
