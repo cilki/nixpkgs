@@ -7,11 +7,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "cilki";
     repo = "sandpolis";
-    rev = "d2cbb47197ab35168fc36ef72d98509934912405";
-    hash = "sha256-FcqdPsBIztVxHtV401L1omVBAynrHyenSfZMLYdRF0E=";
+    rev = "7d0fa3d23fde43d968c58d541deaebd32997a8ac";
+    hash = "sha256-tBQ6MfgYPR9naYB/vnzcsIqqYfN5i5VTwG5kZXbvKKQ=";
   };
 
-  cargoHash = "sha256-plET4P05vPGScWz7ZkwtNh/AvZjNvUSC8JImvZ3iDow=";
+  cargoHash = "sha256-DK5UjgR9lQfhscaaDXdR70VCRamY7U1Yw3DAJsnPCXQ=";
 
   buildAndTestSubdir = "sandpolis";
   buildFeatures = [ "server" ];
